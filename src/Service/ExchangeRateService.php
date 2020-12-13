@@ -2,39 +2,22 @@
 
 namespace App\Service;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Service\ExchangeRate\ExchangeRateInterface;
 
 class ExchangeRateService {
 
-  private $client;
+  private $er;
 
-  public function __construct(HttpClientInterface $client)
+  public function __construct(ExchangeRateInterface $er)
   {
-      $this->client = $client;
+      $this->er = $er;
   }
 
   public function getConvertedRate(string $baseCurrency, string $newCurrency, float $rate): float
   {
-    $exchangeRate = $this->fetchExchangeRate($baseCurrency, $newCurrency);
+    $exchangeRate = $this->er->fetch($baseCurrency, $newCurrency);
     $convertedRate = $rate * $exchangeRate;
     return $convertedRate;
-  }
-
-
-  public function fetchExchangeRate(string $baseCurrency, string $newCurrency): float
-  {
-    $rate = 1;
-    $apiURL = "https://api.exchangeratesapi.io/latest?base=" . $baseCurrency . "&symbols=" . $newCurrency;
-    $response = $this->client->request('GET', $apiURL);
-    $statusCode = $response->getStatusCode();
-
-    if($statusCode == 200) {
-      $content = $response->getContent();
-      $content = $response->toArray();
-      $rate = $content["rates"][$newCurrency];
-    }
-
-    return $rate;
   }
 
 
