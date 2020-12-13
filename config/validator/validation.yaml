@@ -1,0 +1,37 @@
+App\Entity\Category:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    properties:
+        name:
+            - NotBlank: ~
+            - NotNull: ~
+            - Length:
+                min: 2
+                max: 68
+                minMessage: 'Name property must be at least {{ limit }} characters long'
+                maxMessage: 'Name property cannot be longer than {{ limit }} characters'
+
+App\Entity\Product:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    properties:
+        name:
+            - NotBlank: ~
+            - NotNull: ~
+            - Length:
+                min: 2
+                max: 128
+                minMessage: 'Name property must be at least {{ limit }} characters long'
+                maxMessage: 'Name property cannot be longer than {{ limit }} characters'
+        price:
+            - NotBlank: ~
+            - NotNull: ~
+            - Positive: ~
+        currency:
+            - NotBlank: ~
+            - NotNull: ~
+            - Choice:
+                choices:  [EUR, USD]
+                message:  Currency property must be EUR or USD
+        featured:
+            - Type: bool
