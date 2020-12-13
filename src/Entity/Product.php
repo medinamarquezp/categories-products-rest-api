@@ -23,7 +23,7 @@ class Product
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="price")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      */
     private $category;
 
