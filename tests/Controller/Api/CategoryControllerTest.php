@@ -47,8 +47,7 @@ class CategoryControllerTest extends WebTestCase
   public function it_should_create_a_new_category()
   {
     $client = static::createClient();
-    $timestamp = time();
-    $categoryName = "Test category " . $timestamp;
+    $categoryName = "Test category " . time();
     $categoryDescription = "Test categoy description";
     $contentJson = $this->createCategoryRequest($client, '{"name": "'.$categoryName.'", "description": "'.$categoryDescription.'"}');
     $cratedCategoryName = $contentJson->data->name;
@@ -62,11 +61,10 @@ class CategoryControllerTest extends WebTestCase
   public function it_should_update_a_category()
   {
     $client = static::createClient();
-    $timestamp = time();
-    $categoryName = "Test category " . $timestamp;
+    $categoryName = "Test update category " . time();
     $categoryCreated = $this->createCategoryRequest($client, '{"name":"'.$categoryName.'"}');
     $createdCategoryID = $categoryCreated->data->id;
-    $newCategoryName = "Test category " . $timestamp . " UPDATED";
+    $newCategoryName = "Test category " . time() . " UPDATED";
     $categoryUpdated = $this->updateCategoryRequest($client, $createdCategoryID, '{"name": "'.$newCategoryName.'"}');
     $categoryUpdatedName = $categoryUpdated->data->name;
     $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
@@ -77,8 +75,7 @@ class CategoryControllerTest extends WebTestCase
   public function it_should_delete_a_category()
   {
     $client = static::createClient();
-    $timestamp = time();
-    $categoryName = "Test category " . $timestamp;
+    $categoryName = "Test delete category " . time();
     $categoryCreated = $this->createCategoryRequest($client, '{"name":"'.$categoryName.'"}');
     $createdCategoryID = $categoryCreated->data->id;
     $deletedResponse = $this->deleteCategoryRequest($client, $createdCategoryID);
