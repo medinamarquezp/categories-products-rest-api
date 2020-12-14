@@ -52,7 +52,7 @@ class CategoryManager
     return $this->categoryRepository->find($id);
   }
 
-  public function update($category, $requestData): Category
+  public function update($category, $requestData)
   {
     $category->setName($requestData->getName());
     $category->setDescription($requestData->getDescription());
@@ -65,10 +65,19 @@ class CategoryManager
     $this->em->flush();
   }
 
-  public function save(Category $category): Category
+  public function save(Category $category)
   {
     $this->em->persist($category);
     $this->em->flush();
-    return $category;
+    return $this->parseResponse($category);
+  }
+
+  private function parseResponse(Category $category)
+  {
+    return [
+      "id" => $category->getId(),
+      "name" => $category->getName(),
+      "description" => $category->getDescription()
+    ];
   }
 }

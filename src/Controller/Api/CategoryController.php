@@ -9,29 +9,29 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\CategoryManager;
 
-
 /**
  * @Route("/api")
  */
-class CategoryController {
+class CategoryController
+{
 
   /**
    * @Route("/category", methods={"POST"})
    */
   public function create(Request $request, CategoryManager $categoryManager): JsonResponse
   {
-      $category = $categoryManager->serialize($request);
+    $category = $categoryManager->serialize($request);
 
-      $errors = $categoryManager->validate($category);
-      if ($errors) {
-        $response = new ApiResponse(Response::HTTP_BAD_REQUEST);
-        return $response->error($errors);
-      }
+    $errors = $categoryManager->validate($category);
+    if ($errors) {
+      $response = new ApiResponse(Response::HTTP_BAD_REQUEST);
+      return $response->error($errors);
+    }
 
-      $categoryManager->save($category);
+    $categoryCreated = $categoryManager->save($category);
 
-      $response = new ApiResponse(Response::HTTP_OK);
-      return $response->success("Category created correctly");
+    $response = new ApiResponse(Response::HTTP_OK);
+    return $response->success($categoryCreated);
   }
 
   /**
@@ -41,44 +41,44 @@ class CategoryController {
    */
   public function update(Request $request, CategoryManager $categoryManager): JsonResponse
   {
-      $category = $categoryManager->find($request->get('id'));
+    $category = $categoryManager->find($request->get('id'));
 
-      if (!$category) {
-        $response = new ApiResponse(Response::HTTP_NOT_FOUND);
-        return $response->error("Category not found");
-      }
+    if (!$category) {
+      $response = new ApiResponse(Response::HTTP_NOT_FOUND);
+      return $response->error("Category not found");
+    }
 
-      $requestData =  $categoryManager->serialize($request);
+    $requestData =  $categoryManager->serialize($request);
 
-      $errors = $categoryManager->validate($requestData);
-      if ($errors) {
-        $response = new ApiResponse(Response::HTTP_BAD_REQUEST);
-        return $response->error($errors);
-      }
+    $errors = $categoryManager->validate($requestData);
+    if ($errors) {
+      $response = new ApiResponse(Response::HTTP_BAD_REQUEST);
+      return $response->error($errors);
+    }
 
-      $categoryManager->update($category, $requestData);
+    $categoryUpdated = $categoryManager->update($category, $requestData);
 
-      $response = new ApiResponse(Response::HTTP_OK);
-      return $response->success("Category updated correctly");
+    $response = new ApiResponse(Response::HTTP_OK);
+    return $response->success($categoryUpdated);
   }
 
-   /**
+  /**
    * @Route("/category/{id}",
    * requirements={"id"="\d+"},
    * methods={"DELETE"})
    */
   public function delete(Request $request, CategoryManager $categoryManager): JsonResponse
   {
-      $category = $categoryManager->find($request->get('id'));
+    $category = $categoryManager->find($request->get('id'));
 
-      if (!$category) {
-        $response = new ApiResponse(Response::HTTP_NOT_FOUND);
-        return $response->error("Category not found");
-      }
+    if (!$category) {
+      $response = new ApiResponse(Response::HTTP_NOT_FOUND);
+      return $response->error("Category not found");
+    }
 
-      $categoryManager->delete($category);
+    $categoryManager->delete($category);
 
-      $response = new ApiResponse(Response::HTTP_OK);
-      return $response->success("Category deleted correctly");
+    $response = new ApiResponse(Response::HTTP_OK);
+    return $response->success("Category deleted correctly");
   }
 }
