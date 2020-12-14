@@ -66,10 +66,10 @@ class ProductControllerTest extends WebTestCase
       "featured": false
     }';
     $contentJson = $this->createProductRequest($client, $requestBody);
-    $createdData = $contentJson->data;
+    $createdResponseMessage = $contentJson->message;
     $createdMessage = "Product created correctly";
     $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-    $this->assertStringContainsString($createdData, $createdMessage);
+    $this->assertStringContainsString($createdResponseMessage, $createdMessage);
   }
 
   /** @test */
@@ -84,10 +84,10 @@ class ProductControllerTest extends WebTestCase
       "featured": true
     }';
     $contentJson = $this->createProductRequest($client, $requestBody);
-    $createdData = $contentJson->data;
+    $createdResponseMessage = $contentJson->message;
     $createdMessage = "Product created correctly";
     $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-    $this->assertStringContainsString($createdData, $createdMessage);
+    $this->assertStringContainsString($createdResponseMessage, $createdMessage);
   }
 
   /** @test */

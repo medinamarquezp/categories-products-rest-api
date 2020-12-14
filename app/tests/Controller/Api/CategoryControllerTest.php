@@ -79,10 +79,10 @@ class CategoryControllerTest extends WebTestCase
     $categoryCreated = $this->createCategoryRequest($client, '{"name":"'.$categoryName.'"}');
     $createdCategoryID = $categoryCreated->data->id;
     $deletedResponse = $this->deleteCategoryRequest($client, $createdCategoryID);
-    $deletedData = $deletedResponse->data;
+    $deletedResponseMessage = $deletedResponse->message;
     $deletedMessage = "Category deleted correctly";
     $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-    $this->assertEquals($deletedData, $deletedMessage);
+    $this->assertEquals($deletedResponseMessage, $deletedMessage);
   }
 
   private function createCategoryRequest($client, $body)
