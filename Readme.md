@@ -7,7 +7,7 @@
 ```
 $ docker-compose up -d --build
 ```
-2- Access to app container to install packages
+2- Access the app container to install packages
 ```
 $ docker exec -it app bash
 $ composer update
@@ -109,17 +109,17 @@ POST http://localhost/api/product - HTTP/1.1 - Content-Type (application/json)
 - **name:** string *Required*
 - **category:** int (related category ID) *Optional*
 - **price:** float *Required*
-- **currency:** string (only can be EUR or USD) *Required*
+- **currency:** string (can only be EUR or USD) *Required*
 - **featured:** bool (is product featured) *Required*
 
 **Body:**
 ```
  {
-	 "name": "Product name",
-	 "category": 5,
-	 "price": 20,
-	 "currency": "EUR",
-	 "featured": false
+   "name": "Product name",
+   "category": 5,
+   "price": 20,
+   "currency": "EUR",
+   "featured": false
  }
 ```
 **Response 200:**
@@ -158,7 +158,7 @@ GET http://localhost/api/product/featured?currency - HTTP/1.1 - Content-Type (ap
 
 ### **Query string:**
 ### *Parameters*
-- **currency:** string (only can be EUR or USD) *Optional*
+- **currency:** string (can only be EUR or USD) *Optional*
 
 If currency parameter is sended, all products will be shown on the currency selected
 
