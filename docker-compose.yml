@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    db:
+        image: mysql:8.0.20
+        container_name: mysqldb
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - "db_app:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - 3306:3306
+        networks:
+            - network_app
+    php:
+        container_name: app
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ./app/:/var/www/app/
+        networks:
+            - network_app
+    nginx:
+        container_name: httpserver
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        volumes:
+            - ./app/:/var/www/app/
+        ports:
+            - 80:80
+        networks:
+            - network_app
+
+volumes:
+    db_app:
+
+networks:
+    network_app:
