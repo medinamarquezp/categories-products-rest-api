@@ -97,4 +97,21 @@ class Category
 
         return $this;
     }
+
+    public function getResponse()
+    {
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+            "description" => $this->getDescription()
+        ];
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->getId())
+            && empty($this->getName())
+            && empty($this->getDescription())
+            && empty(count($this->getProducts()));
+    }
 }
