@@ -12,7 +12,7 @@ class CategoryControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createCategoryRequest($client, '{}');
-    $nameErrors = $contentJson->error->name;
+    $nameErrors = $contentJson->errors->name;
     $errorMessage = "Name property should not be null";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -24,7 +24,7 @@ class CategoryControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createCategoryRequest($client, '{"name":""}');
-    $nameErrors = $contentJson->error->name;
+    $nameErrors = $contentJson->errors->name;
     $errorMessage = "Name property should not be blank";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -36,7 +36,7 @@ class CategoryControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createCategoryRequest($client, '{"name":"a"}');
-    $nameErrors = $contentJson->error->name;
+    $nameErrors = $contentJson->errors->name;
     $errorMessage = "Name property must be at least 2 characters long";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());

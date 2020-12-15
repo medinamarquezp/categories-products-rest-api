@@ -12,14 +12,14 @@ class ResponseHandler
   private int $statusCode;
   private string $message;
   private $data;
-  private $error;
+  private $errorList;
 
-  function __construct(int $statusCode, $message = null, $data = null, $error = null)
+  function __construct(int $statusCode, $message = null, $data = null, $errorList = null)
   {
     $this->statusCode = $statusCode;
     $this->message = $message;
     $this->data = $data;
-    $this->error = $error;
+    $this->errorList = $errorList;
   }
 
   function response(): JsonResponse
@@ -34,8 +34,8 @@ class ResponseHandler
       "data" => $this->data,
     ];
 
-    if ($this->error) {
-      $response["error"] = $this->error;
+    if ($this->errorList) {
+      $response["errors"] = $this->errorList;
     }
 
     return new JsonResponse($response, $this->statusCode);
