@@ -25,36 +25,45 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere('p.featured = true')
             ->orderBy('p.id', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(Product $product): Product
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->getEntityManager()->persist($product);
+        $this->getEntityManager()->flush();
+        return $product;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Product
+    public function getList(): ?array
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $productList = $this->findAll();
+        $response = $this->parseResponseList($productList);
+        return $response;
     }
-    */
+
+    public function getFeaturedList(): ?array
+    {
+        $productListFeatured = $this->findByFeatured();
+        $response = $this->parseResponseList($productListFeatured);
+        return $response;
+    }
+
+    private function parseResponseList(array $productList): array
+    {
+        $response = [];
+        if (!empty($productList)) {
+            foreach ($productList as $product) {
+                $categoryName = (!empty($product->getCategory())) ? $product->getCategory()->getName() : "";
+                array_push($response, [
+                    "id" => $product->getId(),
+                    "name" => $product->getName(),
+                    "price" => $product->getPrice(),
+                    "currency" => $product->getCurrency(),
+                    "categoryName" => $categoryName,
+                ]);
+            }
+        }
+        return $response;
+    }
 }
