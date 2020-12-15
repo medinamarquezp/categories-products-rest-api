@@ -12,7 +12,7 @@ class ProductControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createProductRequest($client, '{}');
-    $nameErrors = $contentJson->error->name;
+    $nameErrors = $contentJson->errors->name;
     $errorMessage = "Name property should not be null";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -24,7 +24,7 @@ class ProductControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createProductRequest($client, '{"name":""}');
-    $nameErrors = $contentJson->error->name;
+    $nameErrors = $contentJson->errors->name;
     $errorMessage = "Name property should not be blank";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -36,7 +36,7 @@ class ProductControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createProductRequest($client, '{"category":9999999999}');
-    $categoryErrors = $contentJson->error->category;
+    $categoryErrors = $contentJson->errors->category;
     $errorMessage = "Category selected does not exists";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
@@ -48,7 +48,7 @@ class ProductControllerTest extends WebTestCase
   {
     $client = static::createClient();
     $contentJson = $this->createProductRequest($client, '{"currency":"GBP"}');
-    $currencyErrors = $contentJson->error->currency;
+    $currencyErrors = $contentJson->errors->currency;
     $errorMessage = "Currency property must be EUR or USD";
 
     $this->assertEquals(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode());
