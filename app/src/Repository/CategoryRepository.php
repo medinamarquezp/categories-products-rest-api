@@ -19,32 +19,24 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    // /**
-    //  * @return Category[] Returns an array of Category objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function update(Category $data)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $category = new Category();
+        $category->setName($data->getName());
+        $category->setDescription($data->getDescription());
+        return $this->save($category);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Category
+    public function delete(Category $category)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->getEntityManager()->remove($category);
+        $this->getEntityManager()->flush();
     }
-    */
+
+    public function save(Category $category)
+    {
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+        return $category->getResponse();
+    }
 }
