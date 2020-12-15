@@ -2,23 +2,23 @@
 
 namespace App\Service;
 
-use App\Service\ExchangeRate\ExchangeRateInterface;
+use App\Service\Fetch\FetchInterface;
 
 class ExchangeRateService {
 
-  private $er;
+  private $fetch;
 
-  public function __construct(ExchangeRateInterface $er)
+  public function __construct(FetchInterface $fetch)
   {
-      $this->er = $er;
+      $this->fetch = $fetch;
   }
 
   public function getConvertedRate(string $baseCurrency, string $newCurrency, float $rate): float
   {
-    $exchangeRate = $this->er->fetch($baseCurrency, $newCurrency);
+    $path = "https://api.exchangeratesapi.io/latest?base=" . $baseCurrency . "&symbols=" . $newCurrency;
+    $exchangeResponse = $this->fetch->get($path);
+    $exchangeRate = $exchangeResponse["rates"][$newCurrency] ?: 1;
     $convertedRate = $rate * $exchangeRate;
     return $convertedRate;
   }
-
-
 }
