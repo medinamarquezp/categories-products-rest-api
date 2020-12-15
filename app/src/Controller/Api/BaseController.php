@@ -26,9 +26,7 @@ class BaseController extends AbstractController
       if(empty($content)) throw new DerializeException("Request body can not be empty");
 
       $deserializedEntity = $this->serializer->deserialize($content, $entity, 'json');
-      if(!$deserializedEntity instanceof $entity || $deserializedEntity->isEmpty()) {
-        throw new DerializeException("It seems like there is an error with the request parameters");
-      }
+      return $deserializedEntity;
     } catch (BaseException $ex) {
       throw $ex;
     }
