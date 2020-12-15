@@ -4,11 +4,36 @@ namespace App\Controller\Api;
 
 use App\Http\ResponseHandler;
 use App\Exceptions\BaseException;
+use App\Exceptions\DerializeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BaseController extends AbstractController
 {
+  private $serializer;
+
+  public function __construct(SerializerInterface $serializer)
+  {
+    $this->serializer = $serializer;
+  }
+
+  public function deserialize(Request $request, $entity)
+  {
+    try {
+      $content = $request->getContent();
+      if(empty($content)) throw new DerializeException("Request body can not be empty");
+
+      $deserializedEntity = $this->serializer->deserialize($content, $entity, 'json');
+      if(!$deserializedEntity instanceof $entity || $deserializedEntity->isEmpty()) {
+        throw new DerializeException("It seems like there is an error with the request parameters");
+      }
+    } catch (BaseException $ex) {
+      throw $ex;
+    }
+  }
+
   public function success($message = null, $data = null)
   {
     $message = ($message) ? $message : "OK";
